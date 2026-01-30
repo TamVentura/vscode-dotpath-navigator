@@ -1,0 +1,13 @@
+.vscode/
+src/
+test/
+scripts/
+tsconfig.json
+tslint.json
+*/.ts
+**/.js.map
+package-lock.json
+yarn.lock
+npm-debug.log
+.gitignore
+vsix_output/
