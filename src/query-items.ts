@@ -1,4 +1,3 @@
-import path from "path";
 import { QuickPickItem } from "vscode";
 import { DotPathItem, DotPathResultItem } from "./interfaces/dot-path-item";
 import { stringifyDotPath } from "./stringify-dotpath";
@@ -62,7 +61,7 @@ export function queryItems(query: string, items: DotPathItem[]) {
     scored.forEach((s) =>
       list.push({
         label: s.item.rawPath,
-        description: path.basename(s.item.uri.fsPath),
+        description: s.item.uri.fsPath,
       }),
     );
   }
