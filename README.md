@@ -9,6 +9,7 @@ Jump quickly to nested properties in JSON or TS/JS files by typing a dot-path (o
 - **Computed keys**: Handles `[Enum.Member]` and `[CONST]` by matching either their raw names, last identifiers, or—even lazily—their string values.
 - **Cross-file search**: Configure additional files (e.g. translation JSONs) via settings, and jump directly into them.
 - **Create missing paths**: When only one insertion point is valid, a **Create** option will insert the missing object hierarchy and place your cursor at the new property.
+- **Copy path at cursor**: Instantly copy the dot-path of the property under your cursor to the clipboard.
 
 ## Usage
 
@@ -20,6 +21,12 @@ Jump quickly to nested properties in JSON or TS/JS files by typing a dot-path (o
    - **Children mode**: With at least one dot (e.g. `actions.e`), only keys immediately under `actions` are listed.
 
 4. **Select** an entry to jump there, or choose **Create: your.path** to auto-insert missing branches.
+
+### Copy Path at Cursor
+
+1. **Place** your cursor anywhere within a property (key, value, or surrounding whitespace).
+2. <kbd>Ctrl+Alt+P</kbd> (default) or **run** the **Dotpath Navigator: Get DotPath at Cursor** command.
+3. The dot-path is automatically copied to your clipboard and shown in a notification.
 
 ## Configuration
 

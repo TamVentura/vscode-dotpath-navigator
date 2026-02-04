@@ -105,13 +105,12 @@ function handle(
       endPos = originalDocument.lineAt(propEndPos.line).range.end;
     }
 
-    const keyEndPos = originalDocument.positionAt(nodeName.getEnd());
     result.push({
       rawPath: nodePathRaw.join("."),
       valuePath: nodePathVal.join("."),
       uri: originalDocument.uri,
       range: new Range(startPos, endPos),
-      keyRange: new Range(keyPos, keyEndPos),
+      keyRange: new Range(keyPos, keyPos),
     });
 
     const init = propertyAssignment.getInitializer();

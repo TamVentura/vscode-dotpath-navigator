@@ -1,9 +1,9 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-import { DotPathItem } from './interfaces/dot-path-item';
-import { queryItems } from './query-items';
-import { parseDotPath } from './stringify-dotpath';
-import { walkDotPath, walkDotPathOnFile } from './walkers/walk-dotpath';
+import { DotPathItem } from "./interfaces/dot-path-item";
+import { queryItems } from "./query-items";
+import { parseDotPath } from "./stringify-dotpath";
+import { walkDotPath, walkDotPathOnFile } from "./walkers/walk-dotpath";
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
@@ -109,14 +109,14 @@ async function createDotPath(info: { parent: DotPathItem; missing: string[] }) {
   const langId = doc.languageId;
 
   if (langId === "json" || langId === "jsonc") {
-    await createDotPathJson(editor, parent.range, missing);
+    await createDotPathJson(editor, parent.keyRange, missing);
   } else if (
     langId === "typescript" ||
     langId === "javascript" ||
     langId === "typescriptreact" ||
     langId === "javascriptreact"
   ) {
-    await createDotPathTs(editor, parent.range, missing);
+    await createDotPathTs(editor, parent.keyRange, missing);
   }
 }
 
@@ -220,7 +220,7 @@ function findObjectInsertInfo(
 
   // Find matching closing bracket
   let depth = 1;
-  let lastIndexText = -1;
+  let lastIndexText = openBraceIdx;
   for (let i = openBraceIdx + 1; i < text.length; i++) {
     if (
       text[i] !== "\n" &&
@@ -241,7 +241,7 @@ function findObjectInsertInfo(
   }
   if (lastIndexText === -1) return null;
 
-  let needsComma = text[lastIndexText] !== ",";
+  let needsComma = text[lastIndexText] !== "," && text[lastIndexText] !== "{";
 
   return { position: doc.positionAt(lastIndexText + 1), needsComma };
 }
