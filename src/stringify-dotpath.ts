@@ -5,6 +5,7 @@ export function stringifyDotPath(dotPath: DotPathItem) {
   const result: any = {};
   result.uri = dotPath.uri.path;
   result.range = dotPath.range;
+  result.keyRange = dotPath.keyRange;
   result.valuePath = dotPath.valuePath;
   result.rawPath = dotPath.rawPath;
   return JSON.stringify(result);
@@ -19,7 +20,13 @@ export function parseDotPath(text: string): DotPathItem {
     obj.range[1].line,
     obj.range[1].character,
   );
+  const keyRange = new Range(
+    obj.keyRange[0].line,
+    obj.keyRange[0].character,
+    obj.keyRange[1].line,
+    obj.keyRange[1].character,
+  );
   const valuePath = obj.valuePath;
   const rawPath = obj.rawPath;
-  return { uri, range, valuePath, rawPath };
+  return { uri, range, keyRange: keyRange, valuePath, rawPath };
 }

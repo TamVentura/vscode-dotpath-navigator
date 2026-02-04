@@ -1,13 +1,53 @@
-import * as vscode from "vscode";
-import { DotPathItem } from "./interfaces/dot-path-item";
-import { queryItems } from "./query-items";
-import { parseDotPath } from "./stringify-dotpath";
-import { walkDotPath } from "./walkers/walk-dotpath";
+import * as vscode from 'vscode';
+
+import { DotPathItem } from './interfaces/dot-path-item';
+import { queryItems } from './query-items';
+import { parseDotPath } from './stringify-dotpath';
+import { walkDotPath, walkDotPathOnFile } from './walkers/walk-dotpath';
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("dotpathNavigator.search", searchDotPath),
+    vscode.commands.registerCommand(
+      "dotpathNavigator.getDotPathAtCursor",
+      getDotPathAtCursor,
+    ),
   );
+}
+
+/**
+ * Gets the dotpath key at the current cursor position.
+ * Returns the most specific (deepest) dotpath that contains the cursor.
+ */
+async function getDotPathAtCursor(): Promise<DotPathItem | null> {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) return null;
+
+  const doc = editor.document;
+  const cursorPos = editor.selection.active;
+  const items = await walkDotPathOnFile(doc);
+
+  // Find items where cursor is within the range
+  // We want the most specific (deepest) match
+  let bestMatch: DotPathItem | null = null;
+  let bestDepth = -1;
+
+  for (const item of items) {
+    if (item.range.contains(cursorPos)) {
+      const depth = item.rawPath.split(".").length;
+      if (depth > bestDepth) {
+        bestMatch = item;
+        bestDepth = depth;
+      }
+    }
+  }
+
+  if (bestMatch) {
+    await vscode.env.clipboard.writeText(bestMatch.rawPath);
+    vscode.window.showInformationMessage(`Copied: ${bestMatch.rawPath}`);
+  }
+
+  return bestMatch;
 }
 
 async function searchDotPath() {
@@ -219,8 +259,9 @@ function detectIndent(doc: vscode.TextDocument): string {
 
 function navigateTo(it: DotPathItem) {
   vscode.window.showTextDocument(it.uri).then((ed) => {
-    ed.selection = new vscode.Selection(it.range.start, it.range.start);
-    ed.revealRange(it.range, vscode.TextEditorRevealType.InCenter);
+    const cursorPos = it.keyRange.end;
+    ed.selection = new vscode.Selection(cursorPos, cursorPos);
+    ed.revealRange(it.keyRange, vscode.TextEditorRevealType.InCenter);
   });
 }
 

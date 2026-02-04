@@ -66,7 +66,7 @@ async function getExtraFiles(currentUri: string): Promise<TextDocument[]> {
   return files;
 }
 
-async function walkDotPathOnFile(file: TextDocument) {
+export async function walkDotPathOnFile(file: TextDocument) {
   return ["json", "jsonc"].includes(file.languageId)
     ? walkJson(file)
     : await walkTs(file);

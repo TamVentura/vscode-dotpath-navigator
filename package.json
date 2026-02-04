@@ -2,7 +2,7 @@
   "name": "dotpath-navigator",
   "displayName": "Dotpath Navigator",
   "description": "Quickly jump to nested object paths (JSON/TS), resolve computed keys, and even create missing branches.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -19,6 +19,10 @@
       {
         "command": "dotpathNavigator.search",
         "title": "Dotpath Navigator: Search"
+      },
+      {
+        "command": "dotpathNavigator.getDotPathAtCursor",
+        "title": "Dotpath Navigator: Get Path at Cursor"
       }
     ],
     "configuration": {
@@ -39,6 +43,11 @@
       {
         "command": "dotpathNavigator.search",
         "key": "ctrl+alt+o",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "dotpathNavigator.getDotPathAtCursor",
+        "key": "ctrl+alt+p",
         "when": "editorTextFocus"
       }
     ]

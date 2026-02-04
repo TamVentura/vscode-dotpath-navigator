@@ -5,6 +5,7 @@ export interface DotPathItem {
   valuePath: string;
   uri: vscode.Uri;
   range: vscode.Range;
+  keyRange: vscode.Range;
 }
 
 export interface DotPathResultItem extends DotPathItem {
